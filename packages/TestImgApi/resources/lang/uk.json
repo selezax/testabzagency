@@ -11,6 +11,8 @@
     "Previous": "Попередній",
     "Next": "Далі",
     "User Details": "Відомості про користувача",
+    "Close": "Закрити",
+    "field.id": "ID",
     "field.name": "Нікнейм",
     "field.nickname": "Нікнейм",
     "field.email": "Емайл",

@@ -56,17 +56,17 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="userModalLabel">
-                            <i class="fas fa-user text-primary"></i> User Details
+                            <i class="fas fa-user text-primary"></i> {{ $t('User Details') }}
                         </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body" v-if="selectedUser">
-                        <p><strong>{{ ('field.id') }}:</strong> {{ selectedUser.id }}</p>
-                        <p><strong>{{ ('field.name') }}:</strong> {{ selectedUser.name }}</p>
-                        <p><strong>{{ ('field.email') }}:</strong> {{ selectedUser.email }}</p>
-                        <p><strong>{{ ('field.phone') }}:</strong> {{ selectedUser.phone }}</p>
-                        <p><strong>{{ ('field.position') }}:</strong> {{ selectedUser.position }}</p>
-                        <p><strong>{{ ('field.photo') }}:</strong></p>
+                        <p><strong>{{ $t('field.id') }}:</strong> {{ selectedUser.id }}</p>
+                        <p><strong>{{ $t('field.name') }}:</strong> {{ selectedUser.name }}</p>
+                        <p><strong>{{ $t('field.email') }}:</strong> {{ selectedUser.email }}</p>
+                        <p><strong>{{ $t('field.phone') }}:</strong> {{ selectedUser.phone }}</p>
+                        <p><strong>{{ $t('field.position') }}:</strong> {{ selectedUser.position }}</p>
+                        <p><strong>{{ $t('field.photo') }}:</strong></p>
                         <img :src="selectedUser.photo" alt="User Photo" class="img-thumbnail" />
                     </div>
                     <div class="modal-body" v-else-if="loading">
@@ -76,7 +76,7 @@
                         <p class="text-danger">Failed to load user details.</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ $t('Close') }}</button>
                     </div>
                 </div>
             </div>
