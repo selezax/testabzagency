@@ -1,0 +1,140 @@
+services:
+
+    #PHP Service
+    app:
+        env_file:
+            - ./.env
+        container_name: '${DOCKER_PREFIX_CONTAINER_NAME}'
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args:
+                WWWGROUP: '${USER}'
+        image: php:8.3
+        restart: unless-stopped
+        tty: true
+        environment:
+            SERVICE_NAME: app
+            SERVICE_TAGS: dev
+        working_dir: /var/www
+        volumes:
+            - ./:/var/www
+            - ./.confs/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+        networks:
+            - '${DOCKER_PREFIX_CONTAINER_NAME}_app-network'
+
+    #Nginx Service
+    webserver:
+        env_file:
+            - ./.env
+        image: nginx:alpine
+        container_name: "${DOCKER_PREFIX_CONTAINER_NAME}_webserver"
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "${DOCKER_PORT_HTTP:-80}:80"
+            - "${DOCKER_PORT_HTTPS:-443}:443"
+            - "${DOCKER_PORT_SOCKET:-6001}:6001"
+        volumes:
+            - ./:/var/www
+            - ./.confs:/var/.ssl
+            - ./.confs/nginx/conf.d/:/etc/nginx/conf.d/
+        environment:
+            DOMEN_NAME: '${DOCKER_DOMEN_NAME}'
+            SERVERADMIN: admin@localhost
+            SERVERNAME: localhost
+            RUN_USER: '${USER}'
+            RUN_GROUP: '${USER}'
+            FILE_CRT: '${DOCKER_FILE_CRT}'
+            FILE_PRIVKEY: '${DOCKER_FILE_PRIVKEY}'
+        depends_on:
+            - app
+            - db
+        networks:
+            - '${DOCKER_PREFIX_CONTAINER_NAME}_app-network'
+
+    #MySQL Service
+    db:
+        env_file:
+            - ./.env
+        image: 'mysql/mysql-server:8.0'
+        container_name: "${DOCKER_PREFIX_CONTAINER_NAME}db"
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "${DOCKER_MYSQL_PORT:-3306}:3306"
+        environment:
+            MYSQL_USER: '${DOCKER_MYSQL_USER}'
+            MYSQL_PASSWORD: '${DOCKER_MYSQL_PASSWORD}'
+            MYSQL_DATABASE: '${DOCKER_MYSQL_DATABASE}'
+            MYSQL_ROOT_PASSWORD: '${DOCKER_MYSQL_ROOT_PASSWORD}'
+            MYSQL_ROOT_HOST: '${DOCKER_MYSQL_ROOT_HOST}'
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        volumes:
+            - ./../data/mysql:/var/lib/mysql
+            - ./.confs/mysql/my.cnf:/etc/mysql/my.cnf
+            - ./../dumps:/dumps
+        networks:
+            - '${DOCKER_PREFIX_CONTAINER_NAME}_app-network'
+
+
+    memcached:
+        env_file:
+            - ./.env
+        container_name: "${DOCKER_PREFIX_CONTAINER_NAME}_memcached"
+        image: 'memcached:alpine'
+        ports:
+            - "${DOCKER_MEMCACHED_PORT:-11211}:11211"
+        volumes:
+            - ./../data/memcached:/var/lib/memcached
+        networks:
+            - '${DOCKER_PREFIX_CONTAINER_NAME}_app-network'
+
+    redis:
+        env_file:
+            - ./.env
+        container_name: "${DOCKER_PREFIX_CONTAINER_NAME}_redis"
+        image: 'redis:alpine'
+        command: [ "redis-server", "--appendonly", "yes" ]
+        hostname: redis
+        volumes:
+            - ./../data/redisdata:/data
+        ports:
+            - "${DOCKER_REDIS_PORT:-6379}:6379"
+        networks:
+            - '${DOCKER_PREFIX_CONTAINER_NAME}_app-network'
+
+    mailpit:
+        env_file:
+            - ./.env
+        container_name: "${DOCKER_PREFIX_CONTAINER_NAME}_mailpit"
+        image: 'axllent/mailpit:latest'
+        restart: always
+        volumes:
+            - ./../data/mailpit:/data
+        ports:
+            - '${DOCKER_MAILPIT_PORT1:-1025}:1025'
+            - '${DOCKER_MAILPIT_PORT2:-8025}:8025'
+        environment:
+            MP_MAX_MESSAGES: 5000
+            MP_DATA_FILE: /data/mailpit.db
+            MP_SMTP_AUTH_ACCEPT_ANY: 1
+            MP_SMTP_AUTH_ALLOW_INSECURE: 1
+        networks:
+            - '${DOCKER_PREFIX_CONTAINER_NAME}_app-network'
+
+
+
+
+
+#Docker Networks
+networks:
+    abzagency_app-network:
+        driver: bridge
+
+#Volumes
+volumes:
+    dbdata:
+        driver: local
+

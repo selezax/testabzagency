@@ -1,0 +1,28 @@
+{
+    "more": "Показати більше...",
+    "Add new user": "Додати нового користувача",
+
+    "Showing": "Показано",
+    "to": "до",
+    "of": "з",
+    "results": "результати",
+    "Send": "Надіслати",
+    "Reset": "Скинути",
+    "Previous": "Попередній",
+    "Next": "Далі",
+    "User Details": "Відомості про користувача",
+    "field.name": "Нікнейм",
+    "field.nickname": "Нікнейм",
+    "field.email": "Емайл",
+    "field.photo": "Фото",
+    "field.image": "Фото",
+    "field.password": "Пароль",
+    "field.password_confirmation": "Підтвердіть пароль",
+    "field.firstname": "Ім'я",
+    "field.lastname": "Прізвище",
+    "field.position": "Посада",
+    "field.position_id": "Посада",
+    "field.address": "Адреса",
+    "field.created_at": "Створено",
+    "field.phone": "Телефон"
+}

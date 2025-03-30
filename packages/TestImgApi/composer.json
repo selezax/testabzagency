@@ -1,0 +1,37 @@
+{
+    "name": "testimgapi/test",
+    "description": "TestImgApi",
+    "version": "1.0.0",
+    "type": "library",
+    "license": "MIT",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TestImgApi\\TestImgApiServiceProvider"
+            ]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "TestImgApi\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Seleznyov A"
+        }
+    ],
+    "require": {
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "scripts": {
+        "post-autoload-dump": [
+            "@php artisan vendor:publish --tag=lfm_config",
+            "@php artisan vendor:publish --tag=lfm_public",
+            "@php artisan storage:link",
+            "@php artisan vendor:publish --tag=cmsfs",
+            "node -e \"let fs = require('fs'); let mainPackage = JSON.parse(fs.readFileSync('./package.json')); let packageDeps = JSON.parse(fs.readFileSync('./packages/TestImgApi/package.json')).dependencies; mainPackage.dependencies = {...mainPackage.dependencies, ...packageDeps}; fs.writeFileSync('./package.json', JSON.stringify(mainPackage, null, 2));\""
+        ]
+    }
+}
