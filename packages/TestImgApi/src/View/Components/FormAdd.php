@@ -17,10 +17,10 @@ class FormAdd extends Component
             'email' => ['type' => 'email'],
             'phone' => ['type' => 'text'],
             'position_id' => ['type' => 'select', 'data' => $this->getPositionsList()],
-            'password' => ['type' => 'password'],
-            'firstname' => ['type' => 'text'],
-            'lastname' => ['type' => 'text'],
-            'address' => ['type' => 'text'],
+//            'password' => ['type' => 'password'],
+//            'firstname' => ['type' => 'text'],
+//            'lastname' => ['type' => 'text'],
+//            'address' => ['type' => 'text'],
             'photo' => ['type' => 'file'],
         ];
 
